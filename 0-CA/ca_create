@@ -1,0 +1,22 @@
+#! /bin/bash
+
+BIT_ENC=2048
+CA_NAME="SmartME" #same for Organization Name
+EXPIRATION=18250
+
+
+
+mkdir -p ./CA
+cd ./CA
+
+## Generate root CA key
+openssl genrsa -out $CA_NAME"_CA.key" $BIT_ENC
+
+#check
+openssl rsa -in $CA_NAME"_CA.key" -check
+
+## Generate root CA certificate
+openssl req -x509 -new -nodes -key $CA_NAME"_CA.key" -sha256 -days $EXPIRATION  -subj "/C=IT/O="$CA_NAME -out $CA_NAME"_CA.pem"
+
+#check
+openssl x509 -in $CA_NAME"_CA.pem" -text -noout

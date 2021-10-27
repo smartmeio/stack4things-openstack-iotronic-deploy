@@ -1,0 +1,4 @@
+#! /bin/bash
+
+VERSION="felooca-test"
+docker build -t smartme/felooca_test_iotronic_wagent:$VERSION .

@@ -1,0 +1,37 @@
+#! /bin/bash
+
+if [ "$#" -ne 1 ]; then
+        echo "Usage: ./client_cert <CLIENT-CN>"
+        exit
+fi
+
+#$1 -> CN == certificate name
+BIT_ENC=2048
+CA_NAME="SmartME" #same for Organization Name
+EXPIRATION=18250
+
+
+
+mkdir -p "./client_"$1
+cd "./client_"$1
+
+## Generate client key
+openssl genrsa -out $1".key" $BIT_ENC
+
+## Generate client certificate request
+openssl req -new -days $EXPIRATION -subj "/C=IT/O="$CA_NAME"/CN="$1 -key $1".key" -out $1".csr"
+
+#check
+openssl req -text -noout -verify -in $1".csr"
+
+
+## Generate client certificate
+openssl x509 -req -in $1".csr" -CA "../CA/"$CA_NAME"_CA.pem" -CAkey "../CA/"$CA_NAME"_CA.key" -CAcreateserial -out $1".pem" -days $EXPIRATION -sha256
+
+#check
+openssl x509 -in $1".pem" -text -noout
+
+chmod 644 $1".key"
+
+cp ../CA/$CA_NAME"_CA.pem" CA.pem
+

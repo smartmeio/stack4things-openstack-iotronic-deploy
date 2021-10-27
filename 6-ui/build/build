@@ -1,0 +1,4 @@
+#! /bin/bash
+
+VERSION="latest"
+docker build -t smartme/"felooca_test_iotronic_ui":$VERSION .
