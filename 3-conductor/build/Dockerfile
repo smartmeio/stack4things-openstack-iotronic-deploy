@@ -1,4 +1,4 @@
-FROM ubuntu:bionic
+FROM ubuntu:focal
 #ENV VERSION=2.3.9
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -33,7 +33,7 @@ RUN mkdir -p /var/log/iotronic \
 && touch /var/log/iotronic/iotronic-api_error.log \
 && touch /var/log/iotronic/iotronic-api_access.log \
 && chown -R iotronic:iotronic /var/log/iotronic/ \
-&& cp etc/apache2/iotronic.conf /etc/apache2/sites-available/iotronic.conf 
+&& cp etc/apache2/iotronic.conf /etc/apache2/sites-available/iotronic.conf
 
 RUN pip3 uninstall -y SQLAlchemy
 RUN pip3 install SQLAlchemy==1.3.20
