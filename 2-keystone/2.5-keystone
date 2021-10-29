@@ -1,6 +1,6 @@
 #! /bin/bash
 
-HOST="felooca-test-ctrl.smartme.io"
+HOST="demo-test.smartme.io"
 HTTPS=true
 ADMIN_PASS="smartme"
 
@@ -11,15 +11,14 @@ fi
 
 echo $URL
 
-docker exec felooca_test_keystone /bin/sh -c "keystone-manage db_sync" keystone
+docker exec smartme_test_keystone /bin/sh -c "keystone-manage db_sync" keystone
 echo "db_sync"
-docker exec felooca_test_keystone keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
+docker exec smartme_test_keystone keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
 echo "fernet_setup"
-docker exec felooca_test_keystone keystone-manage credential_setup --keystone-user keystone --keystone-group keystone
-echo "credential_setup"
+docker exec smartme_test_keystone keystone-manage credential_setup --keystone-user keystone --keystone-group keystone
 
 
-docker exec felooca_test_keystone keystone-manage bootstrap --bootstrap-password $ADMIN_PASS \
+docker exec smartme_test_keystone keystone-manage bootstrap --bootstrap-password $ADMIN_PASS \
   --bootstrap-admin-url $URL \
   --bootstrap-internal-url $URL \
   --bootstrap-public-url $URL \
@@ -27,9 +26,9 @@ docker exec felooca_test_keystone keystone-manage bootstrap --bootstrap-password
 
 echo "bootstrap"
 
-docker restart felooca_test_keystone
+docker restart smartme_test_keystone
 echo "restarting in 5 seconds"
 sleep 5
 
-docker exec felooca_test_keystone openstack project create --domain default  --description "Service Project" service
+docker exec smartme_test_keystone openstack project create --domain default  --description "Service Project" service
 echo "project created"
