@@ -1,0 +1,116 @@
+version: '3.7'
+services:
+  mariadb:
+    container_name: smartme_test_iotronic_db
+    restart: unless-stopped
+    image: mariadb:focal
+    environment:
+      - MYSQL_ROOT_PASSWORD="smartme"
+    volumes:
+      - 'smartme_test_iotronic_db_data:/var/lib/mysql'
+      - 'smartme_test_iotronic_db_config:/etc/mysql'
+    ports:
+      - '53306:3306'
+    networks:
+      - 'default'
+      
+  rabbitmq:
+    container_name: smartme_test_rabbitmq
+    restart: unless-stopped
+    image: rabbitmq:3.9.8
+    entrypoint: ["/bin/sh","-c"]
+    environment:
+      - RABBIT_PASS="smartme"
+    command:
+      - |
+         rabbitmqctl add_user openstack $${RABBIT_PASS}
+         rabbitmqctl set_permissions openstack ".*" ".*" ".*"
+    ports:
+      - '5672:5672'
+    networks:
+      - 'default'
+      
+  keystone:
+    container_name: smartme_test_keystone
+    restart: unless-stopped
+    image: smartmeio/keystone-stain:1.0
+    environment:
+      - OS_PROJECT_DOMAIN_NAME=Default
+      - OS_USER_DOMAIN_NAME=Default
+      - OS_PROJECT_NAME=admin
+      - OS_USERNAME=admin
+      - OS_PASSWORD=smartme
+      - OS_AUTH_URL=https://demo-test.smartme.io:5000/v3
+      - OS_IDENTITY_API_VERSION=3
+      - OS_IMAGE_API_VERSION=2
+      - HOST="demo-test.smartme.io"
+      - ADMIN_PASS="smartme"
+      - URL="https://demo-test.smartme.io:5000/v3"
+    volumes:
+      - smartme_test_keystone_config:/etc/keystone/
+      - smartme_test_keystone_data:/var/lib/keystone/
+      - /var/log/keystone:/var/log/keystone
+      - /var/log/keystone-api:/var/log/apache2
+    command:
+      - |
+         keystone-manage db_sync
+         echo "db_sync"
+         keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
+         echo "fernet_setup"
+         keystone-manage credential_setup --keystone-user keystone --keystone-group keystone
+         echo "credential_setup"
+         keystone-manage bootstrap --bootstrap-password $${ADMIN_PASS} --bootstrap-admin-url ${{URL}} \
+           --bootstrap-internal-url $${URL} --bootstrap-public-url $${URL} --bootstrap-region-id RegionOne
+         openstack project create --domain default  --description "Service Project" service
+    ports:
+      - '5001:5001'
+    networks:
+      - 'default'
+      
+  conductor:
+    container_name: smartme_test_iotronic_conductor
+    restart: unless-stopped
+    image: smartmeio/conductor
+    environment:
+      - URL="demo-test.smartme.io"
+      - IOTRONIC_PASS="smartme"
+    hostname: conductor
+    volumes:
+      - smartme_test_iotronic_conductor_config:/etc/iotronic/
+      - /var/log/iotronic-conductor:/var/log/iotronic
+    command:
+      - |
+        openstack service create iot --name Iotronic
+        openstack user create --password $${IOTRONIC_PASS} iotronic
+        openstack role add --project service --user iotronic admin
+        openstack role create admin_iot_project
+        openstack role create manager_iot_project
+        openstack role create user_iot
+        openstack role add --project service --user iotronic admin_iot_project
+        openstack endpoint create --region RegionOne iot public $${URL}
+        openstack endpoint create --region RegionOne iot internal $${URL}
+        openstack endpoint create --region RegionOne iot admin $${URL}
+        openstack role add --project admin --user admin admin_iot_project
+    ports:
+      - '8813:8812'
+    networks:
+      - 'default'
+
+
+volumes:
+  smartme_test_iotronic_db_data:
+    name: smartme_test_iotronic_db_data
+  smartme_test_iotronic_db_config:
+    name: smartme_test_iotronic_db_config
+  smartme_test_keystone_config:
+    name: smartme_test_keystone_config
+  smartme_test_keystone_data:
+    name: smartme_test_keystone_data
+  smartme_test_iotronic_conductor_config:
+    name: smartme_test_iotronic_conductor_config
+
+
+networks:
+  default:
+    name: smartme-controller-network
+    driver: 'bridge'
