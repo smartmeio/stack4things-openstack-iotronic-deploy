@@ -1,0 +1,25 @@
+version: '3.7'
+services:
+  crossbario:
+    container_name: smartme_test_iotronic_crossbar
+    restart: unless-stopped
+    image: crossbario/crossbar:cpy3-20.2.1
+    volumes:
+      - 'smartme_test_crossbar_config:/node/.crossbar'
+      - ./etc/ssl/iotronic/client_iotronic/:/node/.crossbar/ssl:ro
+    ports:
+      - '8181:8181'
+    networks:
+      - 'default'
+        
+
+volumes:
+  felooca_test_iotronic_db_data:
+    name: felooca_test_iotronic_db_data
+  felooca_test_iotronic_db_config:
+    name: felooca_test_iotronic_db_config
+
+networks:
+  default:
+    name: smartme-wagent-network
+    driver: 'bridge'
