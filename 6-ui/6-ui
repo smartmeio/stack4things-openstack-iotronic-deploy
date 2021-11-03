@@ -2,14 +2,14 @@
 
 VERSION="latest"
 docker create \
- --name=felooca_test_iotronic_ui \
+ --name=smartme_test_iotronic_ui \
  --restart unless-stopped\
- --network=felooca_test_network \
+ --network=smartme_test_network \
  -p 8585:80 \
- -v felooca_test_iotronic_ui_config:/etc/openstack-dashboard/ \
+ -v smartme_test_iotronic_ui_config:/etc/openstack-dashboard/ \
  -v /var/log/iotronic-ui:/var/log/apache2/ \
-smartme/felooca_test_iotronic_ui:$VERSION
+smartme/smartme_test_iotronic_ui:$VERSION
 
-docker cp conf/local_settings.py felooca_test_iotronic_ui:/etc/openstack-dashboard
+docker cp conf/local_settings.py smartme_test_iotronic_ui:/etc/openstack-dashboard
 
-docker start felooca_test_iotronic_ui
+docker start smartme_test_iotronic_ui
