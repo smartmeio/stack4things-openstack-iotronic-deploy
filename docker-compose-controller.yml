@@ -3,7 +3,7 @@ services:
   mariadb:
     container_name: smartme_test_iotronic_db
     restart: unless-stopped
-    image: mariadb:focal
+    image: smartmeio/mariadb:focal
     environment:
       - MYSQL_ROOT_PASSWORD="smartme"
     volumes:
@@ -17,7 +17,7 @@ services:
   rabbitmq:
     container_name: smartme_test_rabbitmq
     restart: unless-stopped
-    image: rabbitmq:3.9.8
+    image: smartmeio/rabbitmq:3.9.8
     entrypoint: ["/bin/sh","-c"]
     environment:
       - RABBIT_PASS="smartme"
