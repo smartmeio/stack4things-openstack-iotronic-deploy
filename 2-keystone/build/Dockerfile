@@ -1,11 +1,16 @@
 FROM ubuntu:focal
 #ENV VERSION=2.3.9
 
-RUN apt-get update \
- && apt-get install nocache -y software-properties-common \
- && add-apt-repository -y cloud-archive:stein \
- && apt-get update && apt-get -y dist-upgrade && \
- && apt-get install nocache -y python3-openstackclient nano iputils-ping net-tools keystone
+RUN : \
+	&& apt-get update \
+	&& DEBIAN_FRONTEND=noninteractive apt-get install -y nocache software-properties-common \
+		 python3-openstackclient nano iputils-ping net-tools keystone \
+	&& add-apt-repository -y cloud-archive:wallaby \
+	&& apt-get update && apt-get -y dist-upgrade \
+	&& apt-get clean \
+	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+	&& wget -qO- https://bootstrap.pypa.io/pip/get-pip.py | python3 \
+	&& :
 
 # RUN apt-get install nocache keystone -y
 
@@ -14,6 +19,10 @@ RUN mkdir -p /var/log/keystone \
   && touch /var/log/keystone/keystone-wsgi-public.log \
   && touch /var/log/keystone/keystone.log \
   && chown -R keystone:keystone /var/log/keystone/
+
+COPY scripts/keystone-setup.sh /usr/local/bin/keystone-setup
+
+RUN chmod +x /usr/local/bin/keystone-setup
 
 VOLUME ["/etc/keystone"]
 VOLUME ["/var/log/keystone"]
