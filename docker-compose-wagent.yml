@@ -3,21 +3,66 @@ services:
   crossbario:
     container_name: smartme_test_iotronic_crossbar
     restart: unless-stopped
-    image: crossbario/crossbar:cpy3-20.2.1
+    image: smartme_test_iotronic_crossbar:latest
     volumes:
       - 'smartme_test_crossbar_config:/node/.crossbar'
-      - ./etc/ssl/iotronic/client_iotronic/:/node/.crossbar/ssl:ro
+      - /etc/ssl/iotronic/client_iotronic/:/node/.crossbar/ssl:ro
     ports:
       - '8181:8181'
     networks:
       - 'default'
-        
+
+  wstun:
+    container_name: smartmeio_test_iotronic_wstun
+    restart: unless-stopped
+    image: smartmeio/smartmeio_test_iotronic_wstun:allowlist
+    volumes:
+      - '/etc/ssl/iotronic/client_iotronic:/var/lib/iotronic/ssl/:ro'
+      - './allowlist:/var/lib/wstun/allowlist:ro'
+    ports:
+      - '8080:8080'
+      - '50000-50100:50000-50100'
+    networks:
+      - 'default'
+
+  wagent:
+    container_name: smartmeio_test_iotronic_wagent
+    image: smartmeio/smartmeio_test_iotronic_wagent:smartmeio-test
+    restart: unless-stopped
+    hostname: wagent1
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - 'smartmeio_test_iotronic_wagent_config:/etc/iotronic/'
+      - 'smartmeio_test_iotronic_wagent_nginx:/etc/nginx/'
+      - '/var/log/iotronic-wagent:/var/log/iotronic'
+    networks:
+      - 'default'
+
+  ui:
+    container_name: smartmeio_test_iotronic_ui
+    image: smartmeio/smartme_test_iotronic_ui:latest
+    restart: unless-stopped
+    ports:
+      - '8585:80'
+    volumes:
+      - 'smartme_test_iotronic_ui_config:/etc/openstack-dashboard/'
+      - '/var/log/iotronic-ui:/var/log/apache2/'
+    networks:
+      - 'default'
 
 volumes:
-  felooca_test_iotronic_db_data:
-    name: felooca_test_iotronic_db_data
-  felooca_test_iotronic_db_config:
-    name: felooca_test_iotronic_db_config
+  smartmeio_test_iotronic_db_data:
+    name: smartmeio_test_iotronic_db_data
+  smartmeio_test_iotronic_db_config:
+    name: smartmeio_test_iotronic_db_config
+  smartmeio_test_iotronic_wagent_config:
+    name: smartmeio_test_iotronic_wagent_config
+  smartmeio_test_iotronic_wagent_nginx:
+    name: smartmeio_test_iotronic_wagent_nginx
+  smartme_test_iotronic_ui_config:
+    name: smartme_test_iotronic_ui_config
 
 networks:
   default:
