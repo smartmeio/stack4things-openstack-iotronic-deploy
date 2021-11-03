@@ -12,8 +12,8 @@ RUN : \
 	&& apt-get update \
 	&& DEBIAN_FRONTEND=noninteractive apt-get install -y nocache \
  		software-properties-common locales tzdata build-essential \
-		python3-openstackclient python3 python3-setuptools vim \
-		python3-all python3-dev python3-all-dev \
+		python3-openstackclient python3 python3-setuptools vim nano \
+		python3-all python3-dev python3-all-dev git apache2 libapache2-mod-wsgi-py3 \
  	&& add-apt-repository -y cloud-archive:wallaby \
  	&& apt-get update \
 	&& apt-get -y dist-upgrade \
@@ -26,9 +26,7 @@ RUN locale-gen en_US.UTF-8
 ENV TZ 'Europe/Rome'
 RUN echo $TZ > /etc/timezone && rm -f /etc/localtime && ln -nfs /usr/share/zoneinfo/$TZ /etc/localtime && dpkg-reconfigure -f noninteractive tzdata
 
-RUN apt-get install nocache -y git apache2 python3-setuptools libapache2-mod-wsgi-py3
 RUN git clone -b felooca_dev --depth 1 https://github.com/smartmeio/stack4things-openstack-iotronic.git /opt/build/iotronic
-#RUN git clone -b felooca_dev --depth 1 ssh://git@git.smartme.io:20022/smartme.io/stack4things/iotronic/iotronic.git /opt/build/iotronic
 #COPY ./iotronic /opt/build/iotronic
 
 WORKDIR /opt/build/iotronic
@@ -54,9 +52,11 @@ RUN a2ensite iotronic
 COPY conf/iotronic.conf /etc/iotronic/
 COPY scripts/openstack-setup.sh /usr/local/bin/openstack-setup
 
-RUN chmod +x /usr/local/bin/openstack-setup
-
 COPY bin/startConductor /usr/local/bin/startConductor
+
+RUN chmod +x /usr/local/bin/openstack-setup \
+	&& chmod +x /usr/local/bin/startConductor
+
 VOLUME ["/etc/iotronic"]
 VOLUME ["/var/log/iotronic"]
 
