@@ -3,7 +3,7 @@
 CERT_PATH="/etc/ssl/iotronic/client_iotronic/"
 
 docker create \
- --name=felooca_test_iotronic_crossbar \
+ --name=smartme_test_iotronic_crossbar \
  --network=host \
  --restart unless-stopped\
  -p 8181:8181 \
@@ -12,6 +12,6 @@ docker create \
 crossbario/crossbar:cpy3-20.2.1
 
 
-docker cp confs/config.json felooca_test_iotronic_crossbar:/node/.crossbar/
+docker cp confs/config.json smartme_test_iotronic_crossbar:/node/.crossbar/
 
 docker start felooca_test_iotronic_crossbar

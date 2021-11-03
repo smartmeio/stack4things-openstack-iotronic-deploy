@@ -1,6 +1,10 @@
-FROM node:carbon-alpine
-ENV VERSION=allowlist 
+FROM node:dubnium-alpine
+ENV VERSION=allowlist
 #1.1.0
+
+ENV LC_CTYPE en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANG C.UTF-8
 
 #RUN npm install -g --unsafe @mdslab/wstun \
 # && npm cache --force clean
