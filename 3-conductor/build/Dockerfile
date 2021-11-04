@@ -26,7 +26,7 @@ RUN locale-gen en_US.UTF-8
 ENV TZ 'Europe/Rome'
 RUN echo $TZ > /etc/timezone && rm -f /etc/localtime && ln -nfs /usr/share/zoneinfo/$TZ /etc/localtime && dpkg-reconfigure -f noninteractive tzdata
 
-RUN git clone -b felooca_dev --depth 1 https://github.com/smartmeio/stack4things-openstack-iotronic.git /opt/build/iotronic
+RUN git clone --depth 1 https://github.com/smartmeio/stack4things-openstack-iotronic.git /opt/build/iotronic
 #COPY ./iotronic /opt/build/iotronic
 
 WORKDIR /opt/build/iotronic
