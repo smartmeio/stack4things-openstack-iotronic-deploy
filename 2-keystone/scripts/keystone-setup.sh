@@ -1,6 +1,6 @@
 #!/bin/bash -x
 
-HOST="demo-test.smartme.io"
+HOST="demo-controller.smartme.io"
 HTTPS=true
 ADMIN_PASS="smartme"
 

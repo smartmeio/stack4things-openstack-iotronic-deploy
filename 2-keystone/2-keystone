@@ -8,7 +8,7 @@
 
 VERSION=1.0
 
-HOST="demo-test.smartme.io"
+HOST="demo-controller.smartme.io"
 HTTPS=true
 ADMIN_PASS="smartme"
 
@@ -42,7 +42,7 @@ docker create \
  -v smartme_test_keystone_data:/var/lib/keystone/ \
  -v /var/log/keystone:/var/log/keystone \
  -v /var/log/keystone-api:/var/log/apache2 \
-smartmeio/keystone-stain:$VERSION
+smartmeio/keystone-wallaby:$VERSION
 
 
 docker cp conf/keystone.conf smartme_test_keystone:/etc/keystone/
@@ -50,7 +50,7 @@ docker cp conf/keystone.conf smartme_test_keystone:/etc/keystone/
 docker run --rm \
  -v /var/log/keystone:/var/log/keystone \
  -v /var/log/keystone-api:/var/log/apache2 \
-smartmeio/keystone-stain:$VERSION \
+smartmeio/keystone-wallaby:$VERSION \
 /bin/sh -c "chown -R keystone:keystone /var/log/keystone/" 
 
 docker start smartme_test_keystone
