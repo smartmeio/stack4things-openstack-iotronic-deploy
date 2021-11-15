@@ -20,7 +20,7 @@ RUN : \
 
 #RUN pip install setuptools
 
-RUN git clone https://opendev.org/x/python-iotronicclient.git /opt/build/python-iotronicclient
+RUN git clone -b felooca_dev --depth 1 https://github.com/smartmeio/stack4things-openstack-iotronic-py-client.git /opt/build/python-iotronicclient
 WORKDIR /opt/build/python-iotronicclient
 
 RUN pip3 install -r requirements.txt
