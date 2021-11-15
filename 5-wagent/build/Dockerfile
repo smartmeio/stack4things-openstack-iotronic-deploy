@@ -45,7 +45,7 @@ RUN mkdir -p $IOTRONIC_HOME \
 RUN echo "iotronic ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 #RUN git clone https://opendev.org/x/iotronic.git /opt/build/iotronic
-RUN git clone -b felooca_dev --depth 1 https://github.com/smartmeio/stack4things-openstack-iotronic.git /opt/build/iotronic
+RUN git clone --depth 1 https://github.com/smartmeio/stack4things-openstack-iotronic.git /opt/build/iotronic
 
 WORKDIR /opt/build/iotronic
 
