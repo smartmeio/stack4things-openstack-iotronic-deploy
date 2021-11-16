@@ -1,4 +1,4 @@
-FROM ubuntu:focal
+FROM ubuntu:bionic
 #ENV VERSION=2.3.9
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -14,7 +14,7 @@ RUN : \
  		software-properties-common locales tzdata build-essential \
 		python3-openstackclient python3 python3-setuptools vim nano \
 		python3-all python3-dev python3-all-dev git apache2 libapache2-mod-wsgi-py3 \
- 	&& add-apt-repository -y cloud-archive:wallaby \
+	&& add-apt-repository -y cloud-archive:stein \
  	&& apt-get update \
 	&& apt-get -y dist-upgrade \
 	&& apt-get clean \

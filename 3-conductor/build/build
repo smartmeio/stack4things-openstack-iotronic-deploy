@@ -1,4 +1,4 @@
 #! /bin/bash
 
 VERSION="latest"
-docker build -t smartmeio/felooca_test_iotronic_conductor:$VERSION .
+docker build -t smartmeio/s4t_iotronic_conductor:$VERSION .
