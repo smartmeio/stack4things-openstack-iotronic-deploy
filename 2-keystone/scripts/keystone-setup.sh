@@ -4,9 +4,9 @@ HOST="demo-controller.smartme.io"
 HTTPS=true
 ADMIN_PASS="smartme"
 
-URL="http://$HOST:5000/v3"
+URL="http://$HOST:5001/v3"
 if [ "$HTTPS" = true ] ; then
-    URL="https://$HOST:5000/v3"
+    URL="https://$HOST:5001/v3"
 fi
 
 echo $URL

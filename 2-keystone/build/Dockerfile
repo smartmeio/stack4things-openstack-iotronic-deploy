@@ -1,11 +1,11 @@
-FROM ubuntu:focal
+FROM ubuntu:bionic
 #ENV VERSION=2.3.9
 
 RUN : \
 	&& apt-get update \
 	&& DEBIAN_FRONTEND=noninteractive apt-get install -y nocache software-properties-common \
 		 python3-openstackclient nano iputils-ping net-tools keystone \
-	&& add-apt-repository -y cloud-archive:wallaby \
+	&& add-apt-repository -y cloud-archive:stein \
 	&& apt-get update && apt-get -y dist-upgrade \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
@@ -21,6 +21,8 @@ RUN mkdir -p /var/log/keystone \
   && chown -R keystone:keystone /var/log/keystone/
 
 COPY scripts/keystone-setup.sh /usr/local/bin/keystone-setup
+
+COPY conf/keystone.conf /etc/keystone/
 
 RUN chmod +x /usr/local/bin/keystone-setup
 

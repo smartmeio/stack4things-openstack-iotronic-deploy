@@ -34,18 +34,18 @@ echo -e "\e[0m"
 
 docker create \
  --env-file conf/adminrc \
- --name=smartme_test_keystone \
+ --name=s4t_keystone \
  --restart unless-stopped\
- --network=smartme_test_network \
+ --network=s4t_network \
  -p 5001:5000 \
- -v smartme_test_keystone_config:/etc/keystone/ \
- -v smartme_test_keystone_data:/var/lib/keystone/ \
+ -v s4t_keystone_config:/etc/keystone/ \
+ -v s4t_keystone_data:/var/lib/keystone/ \
  -v /var/log/keystone:/var/log/keystone \
  -v /var/log/keystone-api:/var/log/apache2 \
 smartmeio/keystone-wallaby:$VERSION
 
 
-docker cp conf/keystone.conf smartme_test_keystone:/etc/keystone/
+docker cp conf/keystone.conf s4t_keystone:/etc/keystone/
 
 docker run --rm \
  -v /var/log/keystone:/var/log/keystone \
@@ -53,5 +53,5 @@ docker run --rm \
 smartmeio/keystone-wallaby:$VERSION \
 /bin/sh -c "chown -R keystone:keystone /var/log/keystone/" 
 
-docker start smartme_test_keystone
+docker start s4t_keystone
 

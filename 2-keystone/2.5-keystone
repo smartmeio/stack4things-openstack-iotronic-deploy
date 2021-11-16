@@ -4,21 +4,21 @@ HOST="demo-controller.smartme.io"
 HTTPS=true
 ADMIN_PASS="smartme"
 
-URL="http://$HOST:5000/v3"
+URL="http://$HOST:5001/v3"
 if [ "$HTTPS" = true ] ; then
-    URL="https://$HOST:5000/v3"
+    URL="https://$HOST:5001/v3"
 fi
 
 echo $URL
 
-docker exec smartme_test_keystone /bin/sh -c "keystone-manage db_sync" keystone
+docker exec s4t_keystone /bin/sh -c "keystone-manage db_sync" keystone
 echo "db_sync"
-docker exec smartme_test_keystone keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
+docker exec s4t_keystone keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
 echo "fernet_setup"
-docker exec smartme_test_keystone keystone-manage credential_setup --keystone-user keystone --keystone-group keystone
+docker exec s4t_keystone keystone-manage credential_setup --keystone-user keystone --keystone-group keystone
 
 
-docker exec smartme_test_keystone keystone-manage bootstrap --bootstrap-password $ADMIN_PASS \
+docker exec s4t_keystone keystone-manage bootstrap --bootstrap-password $ADMIN_PASS \
   --bootstrap-admin-url $URL \
   --bootstrap-internal-url $URL \
   --bootstrap-public-url $URL \
@@ -26,9 +26,9 @@ docker exec smartme_test_keystone keystone-manage bootstrap --bootstrap-password
 
 echo "bootstrap"
 
-docker restart smartme_test_keystone
+docker restart s4t_keystone
 echo "restarting in 5 seconds"
 sleep 5
 
-docker exec smartme_test_keystone openstack project create --domain default  --description "Service Project" service
+docker exec s4t_keystone openstack project create --domain default  --description "Service Project" service
 echo "project created"
