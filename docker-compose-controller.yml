@@ -21,10 +21,6 @@ services:
     entrypoint: ["/bin/sh","-c"]
     environment:
       - RABBIT_PASS="smartme"
-    command:
-      - |
-         rabbitmqctl add_user openstack $${RABBIT_PASS}
-         rabbitmqctl set_permissions openstack ".*" ".*" ".*"
     ports:
       - '5672:5672'
     networks:
@@ -51,17 +47,6 @@ services:
       - s4t_keystone_data:/var/lib/keystone/
       - /var/log/keystone:/var/log/keystone
       - /var/log/keystone-api:/var/log/apache2
-    command:
-      - |
-         keystone-manage db_sync
-         echo "db_sync"
-         keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
-         echo "fernet_setup"
-         keystone-manage credential_setup --keystone-user keystone --keystone-group keystone
-         echo "credential_setup"
-         keystone-manage bootstrap --bootstrap-password $${ADMIN_PASS} --bootstrap-admin-url ${{URL}} \
-           --bootstrap-internal-url $${URL} --bootstrap-public-url $${URL} --bootstrap-region-id RegionOne
-         openstack project create --domain default  --description "Service Project" service
     ports:
       - '5001:5000'
     networks:
@@ -78,19 +63,6 @@ services:
     volumes:
       - s4t_iotronic_conductor_config:/etc/iotronic/
       - /var/log/iotronic-conductor:/var/log/iotronic
-    command:
-      - |
-        openstack service create iot --name Iotronic
-        openstack user create --password $${IOTRONIC_PASS} iotronic
-        openstack role add --project service --user iotronic admin
-        openstack role create admin_iot_project
-        openstack role create manager_iot_project
-        openstack role create user_iot
-        openstack role add --project service --user iotronic admin_iot_project
-        openstack endpoint create --region RegionOne iot public $${URL}
-        openstack endpoint create --region RegionOne iot internal $${URL}
-        openstack endpoint create --region RegionOne iot admin $${URL}
-        openstack role add --project admin --user admin admin_iot_project
     ports:
       - '8813:8812'
     networks:
