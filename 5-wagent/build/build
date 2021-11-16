@@ -1,4 +1,4 @@
 #! /bin/bash
 
 VERSION="smartme-test"
-docker build -t smartmeio/smartme_test_iotronic_wagent:$VERSION .
+docker build -t smartmeio/s4t_iotronic_wagent:$VERSION .

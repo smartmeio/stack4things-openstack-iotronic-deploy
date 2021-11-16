@@ -1,4 +1,4 @@
-FROM ubuntu:focal
+FROM ubuntu:bionic
 #ENV VERSION=2.3.9
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -17,7 +17,7 @@ ARG IOTRONIC_HOME=/var/lib/iotronic
 
 RUN apt-get update \
 	&& apt-get install nocache -y software-properties-common locales tzdata\
-	&& add-apt-repository -y cloud-archive:wallaby \
+	&& add-apt-repository -y cloud-archive:stein \
 	&& apt-get update && apt-get -y dist-upgrade \
 	&& apt-get install nocache -y build-essential python3-openstackclient \
 		python3 python3-all python3-dev python3-all-dev python3-setuptools \
@@ -74,8 +74,8 @@ RUN mkdir -p /etc/nginx/conf.d/iotronic \
 COPY confs/mapping /etc/nginx/conf.d/iotronic/mapping
 COPY conf/iotronic.conf /etc/iotronic/
 
-RUN echo "stream { include conf.d/iotronic/mapping; }" > /etc/nginx/nginx.conf
-RUN echo "include conf.d/iotronic/servers/*" > /etc/nginx/sites-enabled/default
+RUN echo "stream { include conf.d/iotronic/mapping; }" >> /etc/nginx/nginx.conf
+RUN echo "include conf.d/iotronic/servers/*" >> /etc/nginx/sites-enabled/default
 
 
 EXPOSE 443
