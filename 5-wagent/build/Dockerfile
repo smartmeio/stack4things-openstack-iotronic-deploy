@@ -57,6 +57,7 @@ RUN python3 setup.py install
 #  RUN useradd -m -d /var/lib/iotronic iotronic
 
 RUN mkdir -p /var/log/iotronic \
+	&& mkdir /var/lib/wstun \
 	&& touch /var/log/iotronic/iotronic-wagent.log \
 	&& chown -R iotronic:iotronic /var/log/iotronic/
 
@@ -73,6 +74,7 @@ RUN mkdir -p /etc/nginx/conf.d/iotronic \
 	&& mkdir -p /etc/nginx/conf.d/iotronic/upstreams
 COPY confs/mapping /etc/nginx/conf.d/iotronic/mapping
 COPY conf/iotronic.conf /etc/iotronic/
+COPY conf/allowlist /var/lib/wstun/
 
 RUN echo "stream { include conf.d/iotronic/mapping; }" >> /etc/nginx/nginx.conf
 RUN echo "include conf.d/iotronic/servers/*" >> /etc/nginx/sites-enabled/default

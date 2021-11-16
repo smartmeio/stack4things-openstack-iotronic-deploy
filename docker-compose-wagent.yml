@@ -18,7 +18,7 @@ services:
     image: smartmeio/s4t_iotronic_wstun:1.1.0
     volumes:
       - '/etc/ssl/iotronic/client_iotronic:/var/lib/iotronic/ssl/:ro'
-      - './var/lib/wstun/allowlist:/var/lib/wstun/allowlist:ro'
+      - 's4t_iotronic_wagent_wstun:/var/lib/wstun:ro'
     ports:
       - '8080:8080'
       - '50000-50100:50000-50100'
@@ -36,6 +36,7 @@ services:
     volumes:
       - 's4t_iotronic_wagent_config:/etc/iotronic/'
       - 's4t_iotronic_wagent_nginx:/etc/nginx/'
+      - 's4t_iotronic_wagent_wstun:/var/lib/wstun'
       - '/var/log/iotronic-wagent:/var/log/iotronic'
     networks:
       - 'default'
@@ -63,6 +64,8 @@ volumes:
     name: s4t_iotronic_wagent_nginx
   s4t_iotronic_ui_config:
     name: s4t_iotronic_ui_config
+  s4t_iotronic_wagent_wstun:
+    name: s4t_iotronic_wagent_wstun
 
 networks:
   default:
