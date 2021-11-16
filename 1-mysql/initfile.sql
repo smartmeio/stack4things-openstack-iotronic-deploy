@@ -1,6 +1,12 @@
-CREATE DATABASE smartme_test_keystone;
-GRANT ALL PRIVILEGES ON smartme_test_keystone.* TO 'sme_t_keystone'@'localhost' IDENTIFIED BY 'f3l00caTEST';
-GRANT ALL PRIVILEGES ON smartme_test_keystone.* TO 'sme_t_keystone'@'%' IDENTIFIED BY 'f3l00caTEST';
-CREATE DATABASE smartme_test_iotronic;
-GRANT ALL PRIVILEGES ON smartme_test_iotronic.* TO 'sme_t_iotronic'@'localhost' IDENTIFIED BY 'f3l00caTEST';
-GRANT ALL PRIVILEGES ON smartme_test_iotronic.* TO 'sme_t_iotronic'@'%' IDENTIFIED BY 'f3l00caTEST';
+CREATE USER IF NOT EXISTS s4t_keystone@localhost IDENTIFIED BY 'sm3d3m0n';
+SET PASSWORD FOR s4t_keystone@localhost = PASSWORD('sm3d3m0n');
+
+CREATE USER IF NOT EXISTS s4t_iotronic@localhost IDENTIFIED BY 'sm3d3m0n';
+SET PASSWORD FOR s4t_iotronic@localhost = PASSWORD('sm3d3m0n');
+
+CREATE DATABASE s4t_keystone;
+GRANT ALL PRIVILEGES ON s4t_keystone.* TO 's4t_keystone'@'localhost' IDENTIFIED BY 'sm3d3m0n';
+GRANT ALL PRIVILEGES ON s4t_keystone.* TO 's4t_keystone'@'%' IDENTIFIED BY 'sm3d3m0n';
+CREATE DATABASE s4t_iotronic;
+GRANT ALL PRIVILEGES ON s4t_iotronic.* TO 's4t_iotronic'@'localhost' IDENTIFIED BY 'sm3d3m0n';
+GRANT ALL PRIVILEGES ON s4t_iotronic.* TO 's4t_iotronic'@'%' IDENTIFIED BY 'sm3d3m0n';
