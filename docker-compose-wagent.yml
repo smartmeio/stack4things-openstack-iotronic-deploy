@@ -1,11 +1,11 @@
 version: '3.7'
 services:
   crossbario:
-    container_name: smartme_test_iotronic_crossbar
+    container_name: s4t_iotronic_crossbar
     restart: unless-stopped
-    image: smartme_test_iotronic_crossbar:latest
+    image: smartmeio/s4t_iotronic_crossbar:latest
     volumes:
-      - 'smartme_test_crossbar_config:/node/.crossbar'
+      - 's4t_crossbar_config:/node/.crossbar'
       - /etc/ssl/iotronic/client_iotronic/:/node/.crossbar/ssl:ro
     ports:
       - '8181:8181'
@@ -13,12 +13,12 @@ services:
       - 'default'
 
   wstun:
-    container_name: smartmeio_test_iotronic_wstun
+    container_name: s4t_iotronic_wstun
     restart: unless-stopped
-    image: smartmeio/smartmeio_test_iotronic_wstun:allowlist
+    image: smartmeio/s4t_iotronic_wstun:1.1.0
     volumes:
       - '/etc/ssl/iotronic/client_iotronic:/var/lib/iotronic/ssl/:ro'
-      - './allowlist:/var/lib/wstun/allowlist:ro'
+      - './var/lib/wstun/allowlist:/var/lib/wstun/allowlist:ro'
     ports:
       - '8080:8080'
       - '50000-50100:50000-50100'
@@ -26,43 +26,43 @@ services:
       - 'default'
 
   wagent:
-    container_name: smartmeio_test_iotronic_wagent
-    image: smartmeio/smartmeio_test_iotronic_wagent:smartmeio-test
+    container_name: s4t_iotronic_wagent
+    image: smartmeio/s4t_iotronic_wagent:smartmeio-test
     restart: unless-stopped
     hostname: wagent1
     ports:
       - '80:80'
       - '443:443'
     volumes:
-      - 'smartmeio_test_iotronic_wagent_config:/etc/iotronic/'
-      - 'smartmeio_test_iotronic_wagent_nginx:/etc/nginx/'
+      - 's4t_iotronic_wagent_config:/etc/iotronic/'
+      - 's4t_iotronic_wagent_nginx:/etc/nginx/'
       - '/var/log/iotronic-wagent:/var/log/iotronic'
     networks:
       - 'default'
 
   ui:
-    container_name: smartmeio_test_iotronic_ui
-    image: smartmeio/smartme_test_iotronic_ui:latest
+    container_name: s4t_iotronic_ui
+    image: smartmeio/s4t_iotronic_ui:latest
     restart: unless-stopped
     ports:
       - '8585:80'
     volumes:
-      - 'smartme_test_iotronic_ui_config:/etc/openstack-dashboard/'
+      - 's4t_iotronic_ui_config:/etc/openstack-dashboard/'
       - '/var/log/iotronic-ui:/var/log/apache2/'
     networks:
       - 'default'
 
 volumes:
-  smartmeio_test_iotronic_db_data:
-    name: smartmeio_test_iotronic_db_data
-  smartmeio_test_iotronic_db_config:
-    name: smartmeio_test_iotronic_db_config
-  smartmeio_test_iotronic_wagent_config:
-    name: smartmeio_test_iotronic_wagent_config
-  smartmeio_test_iotronic_wagent_nginx:
-    name: smartmeio_test_iotronic_wagent_nginx
-  smartme_test_iotronic_ui_config:
-    name: smartme_test_iotronic_ui_config
+  s4t_iotronic_db_data:
+    name: s4t_iotronic_db_data
+  s4t_iotronic_db_config:
+    name: s4t_iotronic_db_config
+  s4t_iotronic_wagent_config:
+    name: s4t_iotronic_wagent_config
+  s4t_iotronic_wagent_nginx:
+    name: s4t_iotronic_wagent_nginx
+  s4t_iotronic_ui_config:
+    name: s4t_iotronic_ui_config
 
 networks:
   default:
