@@ -1,23 +1,23 @@
 version: '3.7'
 services:
   mariadb:
-    container_name: smartme_test_iotronic_db
+    container_name: s4t_iotronic_db
     restart: unless-stopped
     image: smartmeio/mariadb:focal
     environment:
       - MYSQL_ROOT_PASSWORD="smartme"
     volumes:
-      - 'smartme_test_iotronic_db_data:/var/lib/mysql'
-      - 'smartme_test_iotronic_db_config:/etc/mysql'
+      - 's4t_iotronic_db_data:/var/lib/mysql'
+      - 's4t_iotronic_db_config:/etc/mysql'
     ports:
       - '53306:3306'
     networks:
       - 'default'
 
   rabbitmq:
-    container_name: smartme_test_rabbitmq
+    container_name: s4t_rabbitmq
     restart: unless-stopped
-    image: smartmeio/rabbitmq:3.9.8
+    image: smartmeio/s4t_rabbitmq:3.9.8
     entrypoint: ["/bin/sh","-c"]
     environment:
       - RABBIT_PASS="smartme"
@@ -31,9 +31,9 @@ services:
       - 'default'
 
   keystone:
-    container_name: smartme_test_keystone
+    container_name: s4t_keystone
     restart: unless-stopped
-    image: smartmeio/keystone-wallaby:1.0
+    image: smartmeio/s4t_keystone:stein
     environment:
       - OS_PROJECT_DOMAIN_NAME=Default
       - OS_USER_DOMAIN_NAME=Default
@@ -47,8 +47,8 @@ services:
       - ADMIN_PASS="smartme"
       - URL="https://demo-controller.smartme.io:5000/v3"
     volumes:
-      - smartme_test_keystone_config:/etc/keystone/
-      - smartme_test_keystone_data:/var/lib/keystone/
+      - s4t_keystone_config:/etc/keystone/
+      - s4t_keystone_data:/var/lib/keystone/
       - /var/log/keystone:/var/log/keystone
       - /var/log/keystone-api:/var/log/apache2
     command:
@@ -63,20 +63,20 @@ services:
            --bootstrap-internal-url $${URL} --bootstrap-public-url $${URL} --bootstrap-region-id RegionOne
          openstack project create --domain default  --description "Service Project" service
     ports:
-      - '5001:5001'
+      - '5001:5000'
     networks:
       - 'default'
 
   conductor:
-    container_name: smartme_test_iotronic_conductor
+    container_name: s4t_iotronic_conductor
     restart: unless-stopped
-    image: smartmeio/conductor:latest
+    image: smartmeio/s4t_iotronic_conductor:latest
     environment:
       - URL="demo-test.smartme.io"
       - IOTRONIC_PASS="smartme"
     hostname: conductor
     volumes:
-      - smartme_test_iotronic_conductor_config:/etc/iotronic/
+      - s4t_iotronic_conductor_config:/etc/iotronic/
       - /var/log/iotronic-conductor:/var/log/iotronic
     command:
       - |
@@ -98,19 +98,19 @@ services:
 
 
 volumes:
-  smartme_test_iotronic_db_data:
-    name: smartme_test_iotronic_db_data
-  smartme_test_iotronic_db_config:
-    name: smartme_test_iotronic_db_config
-  smartme_test_keystone_config:
-    name: smartme_test_keystone_config
-  smartme_test_keystone_data:
-    name: smartme_test_keystone_data
-  smartme_test_iotronic_conductor_config:
-    name: smartme_test_iotronic_conductor_config
+  s4t_iotronic_db_data:
+    name: s4t_iotronic_db_data
+  s4t_iotronic_db_config:
+    name: s4t_iotronic_db_config
+  s4t_keystone_config:
+    name: s4t_keystone_config
+  s4t_keystone_data:
+    name: s4t_keystone_data
+  s4t_iotronic_conductor_config:
+    name: s4t_iotronic_conductor_config
 
 
 networks:
   default:
-    name: smartme-controller-network
+    name: s4t-controller-network
     driver: 'bridge'
