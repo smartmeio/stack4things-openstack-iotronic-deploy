@@ -1,4 +1,4 @@
 #! /bin/bash
 
 VERSION="latest"
-docker build -t smartmeio/smartme_test_iotronic_crossbar:$VERSION .
+docker build -t smartmeio/s4t_iotronic_crossbar:$VERSION .
