@@ -6,7 +6,7 @@
 #  exit
 #fi
 
-VERSION=1.0
+VERSION="stein"
 
 HOST="demo-controller.smartme.io"
 HTTPS=true
@@ -42,7 +42,7 @@ docker create \
  -v s4t_keystone_data:/var/lib/keystone/ \
  -v /var/log/keystone:/var/log/keystone \
  -v /var/log/keystone-api:/var/log/apache2 \
-smartmeio/keystone-wallaby:$VERSION
+smartmeio/s4t_keystone:$VERSION
 
 
 docker cp conf/keystone.conf s4t_keystone:/etc/keystone/

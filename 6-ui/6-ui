@@ -2,14 +2,14 @@
 
 VERSION="latest"
 docker create \
- --name=smartme_test_iotronic_ui \
+ --name=s4t_iotronic_ui \
  --restart unless-stopped\
- --network=smartme_test_network \
+ --network=s4t_network \
  -p 8585:80 \
- -v smartme_test_iotronic_ui_config:/etc/openstack-dashboard/ \
+ -v s4t_iotronic_ui_config:/etc/openstack-dashboard/ \
  -v /var/log/iotronic-ui:/var/log/apache2/ \
-smartme/smartme_test_iotronic_ui:$VERSION
+smartme/s4t_iotronic_ui:$VERSION
 
-docker cp conf/local_settings.py smartme_test_iotronic_ui:/etc/openstack-dashboard
+docker cp conf/local_settings.py s4t_iotronic_ui:/etc/openstack-dashboard
 
-docker start smartme_test_iotronic_ui
+docker start s4t_iotronic_ui
