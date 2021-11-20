@@ -4,7 +4,7 @@ FROM ubuntu:bionic
 RUN : \
 	&& apt-get update \
 	&& DEBIAN_FRONTEND=noninteractive apt-get install -y nocache software-properties-common \
-		 python3-openstackclient nano iputils-ping net-tools keystone \
+		 python3-openstackclient nano iputils-ping net-tools keystone wget curl vim nano \
 	&& add-apt-repository -y cloud-archive:stein \
 	&& apt-get update && apt-get -y dist-upgrade \
 	&& apt-get clean \
@@ -25,6 +25,10 @@ COPY scripts/keystone-setup.sh /usr/local/bin/keystone-setup
 COPY conf/keystone.conf /etc/keystone/
 
 RUN chmod +x /usr/local/bin/keystone-setup
+
+RUN echo 'ServerName demo-controller' > /etc/apache2/conf-available/server-name.conf
+
+RUN a2enconf server-name
 
 VOLUME ["/etc/keystone"]
 VOLUME ["/var/log/keystone"]
