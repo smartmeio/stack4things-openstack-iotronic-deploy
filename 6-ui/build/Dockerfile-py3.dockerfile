@@ -9,9 +9,9 @@ ENV LANG C.UTF-8
 RUN : \
 	&& apt-get update \
 	&& DEBIAN_FRONTEND=noninteractive apt-get install -y nocache \
-		software-properties-common python3 python3-all apt-utils \
+		software-properties-common python3 python3-all apt-utils wget vim \
 		python3-dev python3-all-dev python3-openstackclient nano apache2 \
-		memcached python3-memcache openstack-dashboard git dialog \
+		memcached python3-memcache openstack-dashboard git dialog curl \
 	&& apt-get update && apt-get -y dist-upgrade \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \

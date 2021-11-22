@@ -11,7 +11,7 @@ RUN : \
 	&& DEBIAN_FRONTEND=noninteractive apt-get install -y nocache \
 			software-properties-common python python-all apt-utils  \
 			python-dev python-all-dev python-openstackclient nano apache2 \
-		memcached python-memcache openstack-dashboard git dialog \
+		memcached python-memcache openstack-dashboard git dialog curl wget vim \
 	&& apt-get update && apt-get -y dist-upgrade \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \

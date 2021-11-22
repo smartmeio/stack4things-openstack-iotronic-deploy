@@ -20,7 +20,7 @@ RUN apt-get update \
 	&& add-apt-repository -y cloud-archive:stein \
 	&& apt-get update && apt-get -y dist-upgrade \
 	&& apt-get install nocache -y build-essential python3-openstackclient \
-		python3 python3-all python3-dev python3-all-dev python3-setuptools \
+		python3 python3-all python3-dev python3-all-dev python3-setuptools nano \
 		vim curl iputils-ping wget git apache2 libapache2-mod-wsgi-py3 nginx \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \

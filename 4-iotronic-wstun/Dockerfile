@@ -9,7 +9,7 @@ ENV LANG C.UTF-8
 #RUN npm install -g --unsafe @mdslab/wstun \
 # && npm cache --force clean
 
-RUN apk --no-cache add git \
+RUN apk --no-cache add git wget curl \
   && mkdir -p /var/lib/iotronic/ssl/ \
   && mkdir -p /var/log/wstun/
 
