@@ -6,9 +6,16 @@
 #  exit
 #cfi
 
-RABBIT_PASS="smartme"
+if [ ! -f ${HOME}/.rabbitmq_setup_completed ]
+then
+        RABBIT_PASS="smartme"
 
-rabbitmqctl add_user openstack $RABBIT_PASS
-rabbitmqctl set_permissions openstack ".*" ".*" ".*"
+        rabbitmqctl add_user openstack $RABBIT_PASS
+        rabbitmqctl set_permissions openstack ".*" ".*" ".*"
 
-echo -e "\e[32mCompleted \e[0m"
+        touch ${HOME}/.rabbitmq_setup_completed
+
+        echo -e "\e[32mCompleted \e[0m"
+else
+        echo "no need to setup rabbitmq !"
+fi
