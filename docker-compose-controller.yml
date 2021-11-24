@@ -87,9 +87,11 @@ services:
   ui:
     container_name: s4t_iotronic_ui
     restart: unless-stopped
-    image: smartmeio/s4t_iotronic_ui_py3:latest
+    image: smartmeio/s4t_iotronic_ui:latest
     depends_on:
       - conductor
+    ports:
+      - '8086:80'
     networks:
       - 'default'
 
