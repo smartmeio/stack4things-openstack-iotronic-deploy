@@ -7,10 +7,7 @@ services:
     volumes:
       - 's4t_crossbar_config:/node/.crossbar'
       - /etc/ssl/iotronic/client_iotronic/:/node/.crossbar/ssl:ro
-    ports:
-      - '8181:8181'
-    networks:
-      - 'default'
+    network_mode: host
 
   wstun:
     container_name: s4t_iotronic_wstun
@@ -19,41 +16,23 @@ services:
     volumes:
       - '/etc/ssl/iotronic/client_iotronic:/var/lib/iotronic/ssl/:ro'
       - 's4t_iotronic_wagent_wstun:/var/lib/wstun:ro'
-    ports:
-      - '8080:8080'
-      - '50000-50100:50000-50100'
-    networks:
-      - 'default'
+    network_mode: host
 
   wagent:
     container_name: s4t_iotronic_wagent
-    image: smartmeio/s4t_iotronic_wagent:smartmeio-test
+    image: smartmeio/s4t_iotronic_wagent:smartme-test
     restart: unless-stopped
     hostname: wagent1
-    ports:
-      - '80:80'
-      - '443:443'
     volumes:
       - 's4t_iotronic_wagent_config:/etc/iotronic/'
       - 's4t_iotronic_wagent_nginx:/etc/nginx/'
       - 's4t_iotronic_wagent_wstun:/var/lib/wstun'
       - '/var/log/iotronic-wagent:/var/log/iotronic'
-    networks:
-      - 'default'
-
-  ui:
-    container_name: s4t_iotronic_ui
-    image: smartmeio/s4t_iotronic_ui:latest
-    restart: unless-stopped
-    ports:
-      - '8585:80'
-    volumes:
-      - 's4t_iotronic_ui_config:/etc/openstack-dashboard/'
-      - '/var/log/iotronic-ui:/var/log/apache2/'
-    networks:
-      - 'default'
+    network_mode: host
 
 volumes:
+  s4t_crossbar_config:
+    name: s4t_crossbar_config
   s4t_iotronic_db_data:
     name: s4t_iotronic_db_data
   s4t_iotronic_db_config:
