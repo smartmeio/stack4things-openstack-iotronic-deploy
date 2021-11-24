@@ -11,7 +11,7 @@ RUN : \
 	&& DEBIAN_FRONTEND=noninteractive apt-get install -y nocache \
 		software-properties-common python3 python3-all apt-utils wget vim \
 		python3-dev python3-all-dev python3-openstackclient nano apache2 \
-		memcached python3-memcache openstack-dashboard git dialog curl \
+		memcached python3-memcache openstack-dashboard git dialog curl gcc g++ \
 	&& apt-get update && apt-get -y dist-upgrade \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
@@ -40,6 +40,10 @@ RUN cp iotronic_ui/api/iotronic.py /usr/share/openstack-dashboard/openstack_dash
     && cp iotronic_ui/enabled/_62* /usr/share/openstack-dashboard/openstack_dashboard/enabled/ \
     && cp iotronic_ui/enabled/_63* /usr/share/openstack-dashboard/openstack_dashboard/enabled/ \
     && cp iotronic_ui/enabled/_64* /usr/share/openstack-dashboard/openstack_dashboard/enabled/
+
+RUN echo 'ServerName demo-controller' > /etc/apache2/conf-available/server-name.conf
+
+RUN a2enconf server-name
 
 #RUN apt-get remove --auto-remove openstack-dashboard-ubuntu-theme
 COPY conf/local_settings.py /etc/openstack-dashboard/
