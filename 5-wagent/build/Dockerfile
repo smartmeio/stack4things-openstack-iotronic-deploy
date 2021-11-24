@@ -63,7 +63,8 @@ RUN mkdir -p /var/log/iotronic \
 
 # RUN pip3 uninstall -y SQLAlchemy
 # RUN pip3 install SQLAlchemy==1.3.20
-RUN pip3 install -v SQLAlchemy
+RUN pip3 install -v SQLAlchemy==1.3.20 oslo.db==4.33.0
+RUN pip3 install -v -U cryptography secretstorage
 
 VOLUME ["/etc/iotronic"]
 VOLUME ["/var/log/iotronic"]
@@ -77,7 +78,7 @@ COPY conf/iotronic.conf /etc/iotronic/
 COPY conf/allowlist /var/lib/wstun/
 
 RUN echo "stream { include conf.d/iotronic/mapping; }" >> /etc/nginx/nginx.conf
-RUN echo "include conf.d/iotronic/servers/*" >> /etc/nginx/sites-enabled/default
+RUN echo "include conf.d/iotronic/servers/*;" >> /etc/nginx/sites-enabled/default
 
 
 EXPOSE 443
