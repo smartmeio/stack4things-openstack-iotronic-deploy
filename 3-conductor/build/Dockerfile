@@ -44,7 +44,8 @@ RUN mkdir -p /var/log/iotronic \
 	&& cp etc/apache2/iotronic.conf /etc/apache2/sites-available/iotronic.conf
 
 # RUN pip3 uninstall -y SQLAlchemy
-# RUN pip3 install -v SQLAlchemy==1.3.20
+RUN pip3 install -v SQLAlchemy==1.3.20 oslo.db==4.33.0
+RUN pip3 install -v -U secretstorage cryptography
 
 RUN a2ensite iotronic
 
