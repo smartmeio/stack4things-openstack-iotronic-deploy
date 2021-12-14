@@ -5,8 +5,7 @@ services:
     restart: unless-stopped
     image: smartmeio/mariadb:focal
     environment:
-      - MYSQL_ROOT_PASSWORD="smartme"
-      - MARIADB_ROOT_PASSWORD="smartme"
+      MARIADB_ROOT_PASSWORD: smartme
     volumes:
       - 's4t_iotronic_db_data:/var/lib/mysql'
       - 's4t_iotronic_db_config:/etc/mysql'
