@@ -79,7 +79,7 @@ services:
       - rabbitmq
       - keystone
       - mariadb
-    command: /bin/bash -c 'iotronic-dbsync && openstack-setup && startConductor'
+    command: /bin/bash -c 'iotronic-dbsync && startConductor'
     ports:
       - '8813:8812'
     networks:
