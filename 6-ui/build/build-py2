@@ -1,0 +1,4 @@
+#! /bin/bash
+
+VERSION="latest"
+docker build -t smartmeio/s4t_iotronic_ui:$VERSION -f Dockerfile-py2.dockerfile .

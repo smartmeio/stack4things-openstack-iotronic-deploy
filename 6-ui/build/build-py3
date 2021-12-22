@@ -1,4 +1,0 @@
-#! /bin/bash
-
-VERSION="latest"
-docker build -t smartmeio/s4t_iotronic_ui_py3:$VERSION -f Dockerfile-py3.dockerfile .

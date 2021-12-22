@@ -915,5 +915,11 @@ ALLOWED_PRIVATE_SUBNET_CIDR = {'ipv4': [], 'ipv6': []}
 # contact an admin to change their password.
 #PASSWORD_EXPIRES_WARNING_THRESHOLD_DAYS = 0
 
-IOTRONIC_ZONES={}
-
+IOTRONIC_ZONES={'iot.felooca.io',
+                'iot.felooca.it',
+                # 'iot.felooca.com',
+                'iot.felooca.net',
+                'iot.felooca.org',
+                'iot.felooca.eu',
+                'iot.felooca.info'
+}
