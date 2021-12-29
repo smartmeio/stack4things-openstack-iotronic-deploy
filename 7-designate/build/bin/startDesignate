@@ -1,0 +1,68 @@
+#!/bin/bash
+
+
+/usr/sbin/named -f -u bind &
+status=$?
+if [ $status -ne 0 ]; then
+  echo "Failed to start bind9: $status"
+  exit $status
+fi
+
+# Start the first process
+/usr/bin/designate-central --config-file=/etc/designate/designate.conf &
+status=$?
+if [ $status -ne 0 ]; then
+  echo "Failed to start designate-central: $status"
+  exit $status
+fi
+
+# Start the second process
+/usr/bin/designate-api --config-file=/etc/designate/designate.conf &
+status=$?
+if [ $status -ne 0 ]; then
+  echo "Failed to start designate-api: $status"
+  exit $status
+fi
+
+/usr/bin/designate-worker --config-file=/etc/designate/designate.conf &
+status=$?
+if [ $status -ne 0 ]; then
+  echo "Failed to start designate-worker: $status"
+  exit $status
+fi
+
+/usr/bin/designate-producer --config-file=/etc/designate/designate.conf &
+status=$?
+if [ $status -ne 0 ]; then
+  echo "Failed to start designate-producer: $status"
+  exit $status
+fi
+
+/usr/bin/designate-mdns --config-file=/etc/designate/designate.conf
+status=$?
+if [ $status -ne 0 ]; then
+  echo "Failed to start designate-mdns: $status"
+  exit $status
+fi
+
+
+while sleep 60; do
+  ps aux |grep named |grep -q -v grep
+  PROCESS_1_STATUS=$?
+  ps aux |grep designate-central |grep -q -v grep
+  PROCESS_2_STATUS=$?
+  ps aux |grep designate-api |grep -q -v grep
+  PROCESS_3_STATUS=$?
+  ps aux |grep designate-worker |grep -q -v grep
+  PROCESS_4_STATUS=$?
+  ps aux |grep designate-producer |grep -q -v grep
+  PROCESS_5_STATUS=$?
+  ps aux |grep designate-mdns |grep -q -v grep
+  PROCESS_6_STATUS=$?
+  # If the greps above find anything, they exit with 0 status
+  # If they are not both 0, then something is wrong
+  if [ $PROCESS_1_STATUS -ne 0 -o $PROCESS_2_STATUS -ne 0 -o $PROCESS_3_STATUS -ne 0 -o $PROCESS_4_STATUS -ne 0 -o $PROCESS_5_STATUS -ne 0 -o $PROCESS_6_STATUS -ne 0 ]; then
+    echo "One of the processes has already exited."
+    exit 1
+  fi
+done
