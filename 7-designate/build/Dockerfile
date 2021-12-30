@@ -1,5 +1,4 @@
-FROM ubuntu:bionic
-#ENV VERSION=2.3.9
+FROM ubuntu:focal
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -9,7 +8,7 @@ ENV LANG C.UTF-8
 
 RUN apt-get update \
  && apt-get install nocache -y software-properties-common locales tzdata\
- && add-apt-repository -y cloud-archive:stein \
+ && add-apt-repository -y cloud-archive:xena \
  && apt-get update && apt-get -y dist-upgrade && apt-get install nocache -y build-essential python3-openstackclient python3 python3-setuptools python3-pip vim
 
 RUN locale-gen en_US.UTF-8
@@ -22,6 +21,7 @@ RUN apt-get install nocache bind9 bind9utils bind9-doc designate-worker designat
 COPY bin/startDesignate /usr/local/bin/startDesignate
 
 VOLUME ["/etc/designate"]
+VOLUME ["/etc/bind"]
 VOLUME ["/var/log/designate"]
 
 EXPOSE 9001

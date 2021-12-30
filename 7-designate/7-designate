@@ -11,8 +11,12 @@ docker create \
  -p 53:53/udp \
  -p 53:53/tcp \
  -v s4t_designate_config:/etc/designate/ \
+ -v s4t_bind:/etc/bind/ \
  -v /var/log/designate-conductor:/var/log/designate \
 smartme/s4t_designate:$VERSION
+
+docker cp  build/bin/startDesignate s4t_designate:/usr/local/bin/
+docker cp  conf/adminrc s4t_designate:/root/
 
 docker cp conf/designate.conf s4t_designate:/etc/designate/
 docker cp conf/pools.yaml s4t_designate:/etc/designate/
@@ -31,12 +35,7 @@ docker run --rm \
  -v /var/log/designate-conductor:/var/log/designate \
 smartme/s4t_designate:$VERSION /bin/sh -c "designate-manage database sync" designate
 
-docker run --rm \
- --network=s4t-controller-network \
- -v s4t_designate_config:/etc/designate/ \
- -v /var/log/designate-conductor:/var/log/designate \
-smartme/s4t_designate:$VERSION /bin/sh -c "designate-manage pool update" designate
-
-docker cp  build/bin/startDesignate s4t_designate:/usr/local/bin/
- 
 docker start s4t_designate
+
+echo "aspetto che i servizi siano su"
+sleep 10
