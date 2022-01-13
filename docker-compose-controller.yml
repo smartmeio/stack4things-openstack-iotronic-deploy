@@ -84,6 +84,38 @@ services:
     networks:
       - 'default'
 
+  designate:
+    container_name: s4t_iotronic_designate
+    image: smartmeio/s4t_iotronic_designate:latest
+    environment:
+      - OS_PROJECT_DOMAIN_NAME=Default
+      - OS_USER_DOMAIN_NAME=Default
+      - OS_PROJECT_NAME=admin
+      - OS_USERNAME=admin
+      - OS_PASSWORD=smartme
+      - OS_AUTH_URL=https://demo-controller.smartme.io:5000/v3
+      - OS_IDENTITY_API_VERSION=3
+      - OS_IMAGE_API_VERSION=2
+      - HOST="demo-controller.smartme.io"
+      - ADMIN_PASS="smartme"
+      - IOTRONIC_PASS="smartme"
+    hostname: designate
+    volumes:
+      - s4t_designate_config:/etc/designate
+      - s4t_bind:/etc/bind
+      - /var/log/designate-conductor:/var/log/designate
+    depends_on:
+      - rabbitmq
+      - keystone
+      - mariadb
+    command: /bin/bash -c 'iotronic-dbsync && startDesignate'
+    ports:
+      - '9002:9001'
+      - '53:53/udp'
+      - '53:53'
+    networks:
+      - 'default'
+
   ui:
     container_name: s4t_iotronic_ui
     restart: unless-stopped
@@ -106,7 +138,10 @@ volumes:
     name: s4t_keystone_data
   s4t_iotronic_conductor_config:
     name: s4t_iotronic_conductor_config
-
+  s4t_designate_config:
+    name: s4t_designate_config
+  s4t_bind:
+    name: s4t_bind
 
 networks:
   default:
