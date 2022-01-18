@@ -16,7 +16,8 @@ then
   openstack role add --project service --user designate admin
 
   openstack endpoint create --region RegionOne dns public $URL
-  
+  /bin/sh -c "designate-manage pool update" designate
+
   touch ${HOME}/.designate_setup_completed
 else
 	echo "no need to setup designate !"
