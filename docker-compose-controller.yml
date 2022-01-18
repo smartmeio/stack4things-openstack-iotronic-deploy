@@ -108,7 +108,7 @@ services:
       - rabbitmq
       - keystone
       - mariadb
-    command: /bin/bash -c 'iotronic-dbsync && startDesignate'
+    command: /bin/bash -c 'designate-manage database sync && startDesignate'
     ports:
       - '9002:9001'
       - '53:53/udp'
