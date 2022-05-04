@@ -9,7 +9,7 @@
 RABBIT_PASS="smartme"
 
 docker run -d \
- --name=felooca_test_rabbitmq\
+ --name=smartme_test_rabbitmq\
  -p 5672:5672 \
  --network=host \
  --restart unless-stopped \

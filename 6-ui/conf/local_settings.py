@@ -183,7 +183,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 #    ('http://cluster2.example.com:5000/v3', 'cluster2'),
 #]
 
-OPENSTACK_HOST = "felooca-test-ctrl.smartme.io"
+OPENSTACK_HOST = "demo-controller.smartme.io"
 OPENSTACK_KEYSTONE_URL = "https://%s:5000/v3" % OPENSTACK_HOST
 OPENSTACK_KEYSTONE_DEFAULT_ROLE = "member"
 
@@ -915,11 +915,5 @@ ALLOWED_PRIVATE_SUBNET_CIDR = {'ipv4': [], 'ipv6': []}
 # contact an admin to change their password.
 #PASSWORD_EXPIRES_WARNING_THRESHOLD_DAYS = 0
 
-IOTRONIC_ZONES={'iot.felooca.io',
-                'iot.felooca.it',
-                # 'iot.felooca.com',
-                'iot.felooca.net',
-                'iot.felooca.org',
-                'iot.felooca.eu',
-                'iot.felooca.info'
-}
+IOTRONIC_ZONES={}
+

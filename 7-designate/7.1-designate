@@ -1,0 +1,18 @@
+#! /bin/bash
+
+IP_DESIGNATE="demo-controller.smartme.io"
+HTTPS=true
+DESIGNATE_PASS="smartme"
+
+URL="http://$IP_DESIGNATE:9001"
+if [ "$HTTPS" = true ] ; then
+    URL="https://$IP_DESIGNATE:9001"
+fi
+
+echo $URL
+
+docker exec s4t_keystone openstack service create dns --name Designate
+docker exec s4t_keystone openstack user create --password $DESIGNATE_PASS designate
+docker exec s4t_keystone openstack role add --project service --user designate admin
+
+docker exec s4t_keystone openstack endpoint create --region RegionOne dns public $URL

@@ -5,16 +5,16 @@ CERT_PATH="/etc/ssl/iotronic/client_iotronic/"
 
 ALLOW_PATH="/var/lib/docker/volumes/felooca_test_iotronic_wagent_config/_data/allowlist"
 
-docker build -t smartmeio/felooca_test_iotronic_wstun:$VERSION .
+docker build -t smartmeio/s4t_iotronic_wstun:$VERSION .
 
 RANGE="50000-50100:50000-50100"
 
 docker run -d \
- --name=felooca_test_iotronic_wstun \
+ --name=s4t_iotronic_wstun \
  --network=host \
  --restart unless-stopped\
  -p 8080:8080 \
  -p $RANGE \
 -v $CERT_PATH:/var/lib/iotronic/ssl/:ro \
 -v $ALLOW_PATH:/var/lib/wstun/allowlist:ro \
-smartmeio/felooca_test_iotronic_wstun:$VERSION
+smartmeio/s4t_iotronic_wstun:$VERSION

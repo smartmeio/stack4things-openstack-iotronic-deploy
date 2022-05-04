@@ -3,28 +3,28 @@
 VERSION="latest"
 
 docker create \
- --name=felooca_test_iotronic_conductor \
+ --name=s4t_iotronic_conductor \
  --restart unless-stopped\
- --network=felooca_test_network \
+ --network=s4t_network \
  --hostname conductor \
  -p 8813:8812 \
- -v felooca_test_iotronic_conductor_config:/etc/iotronic/ \
+ -v s4t_iotronic_conductor_config:/etc/iotronic/ \
  -v /var/log/iotronic-conductor:/var/log/iotronic \
-smartme/felooca_test_iotronic_conductor:$VERSION
+smartme/s4t_iotronic_conductor:$VERSION
 
-docker cp conf/iotronic.conf felooca_test_iotronic_conductor:/etc/iotronic/
+docker cp conf/iotronic.conf s4t_iotronic_conductor:/etc/iotronic/
 
 docker run --rm \
- --network=felooca_test_network \
- -v felooca_test_iotronic_conductor_config:/etc/iotronic/ \
+ --network=s4t_network \
+ -v s4t_iotronic_conductor_config:/etc/iotronic/ \
  -v /var/log/iotronic-conductor:/var/log/iotronic \
-smartme/felooca_test_iotronic_conductor:$VERSION \
-/bin/sh -c "chown -R iotronic:iotronic /var/log/iotronic/" 
+smartme/s4t_iotronic_conductor:$VERSION \
+/bin/sh -c "chown -R iotronic:iotronic /var/log/iotronic/"
 
 docker run --rm \
- --network=felooca_test_network \
- -v felooca_test_iotronic_conductor_config:/etc/iotronic/ \
+ --network=s4t_network \
+ -v s4t_iotronic_conductor_config:/etc/iotronic/ \
  -v /var/log/iotronic-conductor:/var/log/iotronic \
-smartme/felooca_test_iotronic_conductor:$VERSION /bin/sh -c "iotronic-dbsync" 
+smartme/s4t_iotronic_conductor:$VERSION /bin/sh -c "iotronic-dbsync"
 
-docker start felooca_test_iotronic_conductor
+docker start s4t_iotronic_conductor

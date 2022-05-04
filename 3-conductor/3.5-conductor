@@ -1,6 +1,6 @@
 #! /bin/bash
 
-IP_IOTRONIC="felooca-test.smartme.io"
+IP_IOTRONIC="demo-test.smartme.io"
 HTTPS=true
 IOTRONIC_PASS="smartme"
 

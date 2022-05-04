@@ -1,36 +1,36 @@
 #! /bin/bash
 
 
-VERSION="felooca-test"
+VERSION="smartmeio-test"
 
 docker create \
- --name=felooca_test_iotronic_wagent \
+ --name=smartmeio_test_iotronic_wagent \
  --restart unless-stopped\
  --network=host \
  -p 80:80 \
  -p 443:443 \
  --hostname wagent1 \
- -v felooca_test_iotronic_wagent_config:/etc/iotronic/ \
- -v felooca_test_iotronic_wagent_nginx:/etc/nginx/ \
+ -v smartmeio_test_iotronic_wagent_config:/etc/iotronic/ \
+ -v smartmeio_test_iotronic_wagent_nginx:/etc/nginx/ \
  -v /var/log/iotronic-wagent:/var/log/iotronic \
-smartme/felooca_test_iotronic_wagent:$VERSION
+smartme/smartmeio_test_iotronic_wagent:$VERSION
 
 docker run --rm \
  --network=host \
- -v felooca_test_iotronic_wagent_config:/etc/iotronic/ \
+ -v smartmeio_test_iotronic_wagent_config:/etc/iotronic/ \
  -v /var/log/iotronic-wagent:/var/log/iotronic \
-smartme/felooca_test_iotronic_wagent:$VERSION \
-/bin/sh -c "chown -R iotronic:iotronic /var/log/iotronic/" 
+smartme/smartmeio_test_iotronic_wagent:$VERSION \
+/bin/sh -c "chown -R iotronic:iotronic /var/log/iotronic/"
 
 
 docker run --rm \
  --network=host \
--v felooca_test_iotronic_wagent_nginx:/etc/nginx/ \
-smartme/felooca_test_iotronic_wagent:$VERSION \
+-v smartmeio_test_iotronic_wagent_nginx:/etc/nginx/ \
+smartme/smartmeio_test_iotronic_wagent:$VERSION \
 /bin/sh -c "echo 'stream { include conf.d/iotronic/mapping; }' >> /etc/nginx/nginx.conf && echo 'include conf.d/iotronic/servers/*;' >> /etc/nginx/sites-enabled/default"
- 
 
-docker cp conf/iotronic.conf felooca_test_iotronic_wagent:/etc/iotronic/
 
-docker stop felooca_test_iotronic_wagent
-docker start felooca_test_iotronic_wagent
+docker cp conf/iotronic.conf smartmeio_test_iotronic_wagent:/etc/iotronic/
+
+docker stop smartmeio_test_iotronic_wagent
+docker start smartmeio_test_iotronic_wagent
