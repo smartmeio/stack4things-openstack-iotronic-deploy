@@ -1,0 +1,57 @@
+#! /bin/bash
+
+
+#if [ "$EUID" -ne 0 ]
+#  then echo "Please run as root"
+#  exit
+#fi
+
+VERSION="stein"
+
+HOST="demo-controller.smartme.io"
+HTTPS=true
+ADMIN_PASS="smartme"
+
+OS_AUTH_URL="http://$HOST:5000/v3"
+if [ "$HTTPS" = true ] ; then
+    OS_AUTH_URL="https://$HOST:5000/v3"
+fi
+
+echo $OS_AUTH_URL
+file="conf/adminrc"
+
+sed -i "s|OS_AUTH_URL=.*|OS_AUTH_URL=$OS_AUTH_URL|g" $file
+sed -i "s|OS_PASSWORD=.*|OS_PASSWORD=$ADMIN_PASS|g" $file
+
+echo -e "\e[32mThis is your adminrc file\n\n"
+
+while IFS= read -r line
+do
+	printf 'export %s\n' "$line"
+done <"$file"
+
+echo -e "\e[0m"
+
+docker create \
+ --env-file conf/adminrc \
+ --name=s4t_keystone \
+ --restart unless-stopped\
+ --network=s4t_network \
+ -p 5001:5000 \
+ -v s4t_keystone_config:/etc/keystone/ \
+ -v s4t_keystone_data:/var/lib/keystone/ \
+ -v /var/log/keystone:/var/log/keystone \
+ -v /var/log/keystone-api:/var/log/apache2 \
+smartmeio/s4t_keystone:$VERSION
+
+
+docker cp conf/keystone.conf s4t_keystone:/etc/keystone/
+
+docker run --rm \
+ -v /var/log/keystone:/var/log/keystone \
+ -v /var/log/keystone-api:/var/log/apache2 \
+smartmeio/keystone-wallaby:$VERSION \
+/bin/sh -c "chown -R keystone:keystone /var/log/keystone/" 
+
+docker start s4t_keystone
+

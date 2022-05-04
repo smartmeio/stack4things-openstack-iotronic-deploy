@@ -1,0 +1,4 @@
+#! /bin/bash
+
+VERSION="stein"
+docker build -t smartmeio/s4t_keystone:$VERSION .

@@ -1,0 +1,30 @@
+#! /bin/bash
+
+VERSION="latest"
+
+docker create \
+ --name=s4t_iotronic_conductor \
+ --restart unless-stopped\
+ --network=s4t_network \
+ --hostname conductor \
+ -p 8813:8812 \
+ -v s4t_iotronic_conductor_config:/etc/iotronic/ \
+ -v /var/log/iotronic-conductor:/var/log/iotronic \
+smartme/s4t_iotronic_conductor:$VERSION
+
+docker cp conf/iotronic.conf s4t_iotronic_conductor:/etc/iotronic/
+
+docker run --rm \
+ --network=s4t_network \
+ -v s4t_iotronic_conductor_config:/etc/iotronic/ \
+ -v /var/log/iotronic-conductor:/var/log/iotronic \
+smartme/s4t_iotronic_conductor:$VERSION \
+/bin/sh -c "chown -R iotronic:iotronic /var/log/iotronic/"
+
+docker run --rm \
+ --network=s4t_network \
+ -v s4t_iotronic_conductor_config:/etc/iotronic/ \
+ -v /var/log/iotronic-conductor:/var/log/iotronic \
+smartme/s4t_iotronic_conductor:$VERSION /bin/sh -c "iotronic-dbsync"
+
+docker start s4t_iotronic_conductor

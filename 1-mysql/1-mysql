@@ -1,0 +1,27 @@
+#! /bin/bash
+
+
+#if [ "$EUID" -ne 0 ]
+#  then echo "Please run as root"
+#  exit
+#fi
+
+MYSQL_ROOT_PASSWORD="smartme"
+
+
+docker create \
+ --name=smartme_test_iotronic_db\
+ --network=smartme_test_network \
+ -p 53306:3306 \
+ --restart unless-stopped\
+ -e MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD \
+ -v smartme_test_iotronic_db_data:/var/lib/mysql \
+ -v smartme_test_iotronic_db_config:/etc/mysql \
+mariadb:focal
+
+docker cp create_dbs.sql smartme_test_iotronic_db:/docker-entrypoint-initdb.d/create_dbs.sql
+docker cp 99-openstack.conf smartme_test_iotronic_db:/etc/mysql/mariadb.conf.d/99-openstack.cnf
+
+docker start smartme_test_iotronic_db
+
+echo -e "\e[32mCompleted but wait mariadb to be ready using docker logs -f smartme_test_iotronic_db\e[0m"

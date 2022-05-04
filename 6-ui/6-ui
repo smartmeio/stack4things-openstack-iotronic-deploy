@@ -1,0 +1,15 @@
+#! /bin/bash
+
+VERSION="latest"
+docker create \
+ --name=s4t_iotronic_ui \
+ --restart unless-stopped\
+ --network=s4t_network \
+ -p 8585:80 \
+ -v s4t_iotronic_ui_config:/etc/openstack-dashboard/ \
+ -v /var/log/iotronic-ui:/var/log/apache2/ \
+smartme/s4t_iotronic_ui:$VERSION
+
+docker cp conf/local_settings.py s4t_iotronic_ui:/etc/openstack-dashboard
+
+docker start s4t_iotronic_ui

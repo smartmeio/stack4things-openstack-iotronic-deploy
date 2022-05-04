@@ -1,0 +1,26 @@
+#! /bin/bash
+
+IP_IOTRONIC="demo-test.smartme.io"
+HTTPS=true
+IOTRONIC_PASS="smartme"
+
+URL="http://$IP_IOTRONIC:8812"
+if [ "$HTTPS" = true ] ; then
+    URL="https://$IP_IOTRONIC:8812"
+fi
+
+echo $URL
+
+docker exec felooca_test_keystone openstack service create iot --name Iotronic
+docker exec felooca_test_keystone openstack user create --password $IOTRONIC_PASS iotronic
+docker exec felooca_test_keystone openstack role add --project service --user iotronic admin
+docker exec felooca_test_keystone openstack role create admin_iot_project
+docker exec felooca_test_keystone openstack role create manager_iot_project
+docker exec felooca_test_keystone openstack role create user_iot
+docker exec felooca_test_keystone openstack role add --project service --user iotronic admin_iot_project
+
+docker exec felooca_test_keystone openstack endpoint create --region RegionOne iot public $URL
+docker exec felooca_test_keystone openstack endpoint create --region RegionOne iot internal $URL
+docker exec felooca_test_keystone openstack endpoint create --region RegionOne iot admin $URL
+
+docker exec felooca_test_keystone openstack role add --project admin --user admin admin_iot_project

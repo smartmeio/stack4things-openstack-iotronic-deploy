@@ -1,0 +1,56 @@
+{
+  "version": 2,
+  "controller": {
+  },
+  "workers": [
+     {
+        "type": "router",
+        "realms": [
+           {
+              "name": "s4t",
+              "roles": [
+                 {
+                    "name": "anonymous",
+                    "permissions": [
+                       {
+                          "uri": "*",
+                          "allow": {
+                               "publish": true,
+                               "subscribe": true,
+                               "call": true,
+                               "register": true
+                           }
+                       }
+                    ]
+                 }
+              ]
+           }
+        ],
+        "transports": [
+           {
+               "type": "websocket",
+               "endpoint": {
+                 "type": "tcp",
+                 "port":8181,
+         "tls": {
+                       "chain_certificates": ["/node/.crossbar/ssl/CA.pem"],
+           "key": "/node/.crossbar/ssl/iotronic.key",
+           "certificate": "/node/.crossbar/ssl/iotronic.pem"
+         }
+
+               },
+               "options":{
+                       "enable_webstatus":true,
+                       "fail_by_drop": true,
+                       "open_handshake_timeout": 2500,
+                       "close_handshake_timeout": 1000,
+                       "auto_ping_interval": 20000,
+                       "auto_ping_timeout": 0,
+                       "auto_ping_size": 4
+               }
+           }
+        ]
+     }
+  ]
+}
+

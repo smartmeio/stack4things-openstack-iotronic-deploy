@@ -1,0 +1,11 @@
+map $ssl_preread_server_name $name {
+    include conf.d/iotronic/maps/*;
+}
+
+include conf.d/iotronic/upstreams/*;
+
+server {
+    listen 443;
+    proxy_pass $name;
+    ssl_preread on;
+}
