@@ -1,0 +1,10 @@
+#! /bin/bash
+
+DNS="test.felooca.info"
+EMAIL="dnsmaster@example.com"
+
+docker exec s4t_designate /bin/sh -c "designate-manage pool update" designate
+docker restart s4t_designate
+docker exec s4t_designate  /bin/bash -c "source /root/adminrc && openstack zone create --email ${EMAIL} ${DNS}."
+
+
